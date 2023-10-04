@@ -1,25 +1,57 @@
-import logo from './logo.svg';
+import React from 'react';
+import { useState } from 'react';
 import './App.css';
 
+import 'react-toastify/dist/ReactToastify.css';
+
+
+
+import ProductPage from "./comp/ProductPage";
+import {ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Cart from './comp/cart';
+import Header from './comp/Header';
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const[cardItem,setCardItem]=useState([]);
+  
+
+    const AddItem=item=>{
+      const IsItemAdded=cardItem.findIndex(function(array){
+          return array.id===item.id;
+        })
+        if(IsItemAdded  !== -1){
+          toast("Item already added",{
+          type:"error"})
+          return
+        }
+  
+        setCardItem([...cardItem,item])
+      
+    }
+    
+    const RemoveItem=item=>{
+      setCardItem(cardItem.filter(singleItem => singleItem.id !== item.id))
+    }
+    const BuyNow=()=>{
+      
+     
+      {toast("Purchase Complete", {
+        type: "success"
+      });}
+      setCardItem([])
+    }
+    console.log(cardItem);
+  
+     
+    return (
+  <div>
+  
+  <Header/>
+  <ToastContainer />
+    <ProductPage AddItem={AddItem}/>
+    <Cart cardItem={cardItem} RemoveItem={RemoveItem} BuyNow={BuyNow}/>
+  </div>
+    );
 }
 
 export default App;
